@@ -13,7 +13,3 @@ else {
 }
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-
-
-#Redo screenshot, logo, sidebar, scrollbar
-
