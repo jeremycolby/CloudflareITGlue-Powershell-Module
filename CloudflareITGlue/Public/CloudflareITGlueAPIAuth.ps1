@@ -42,9 +42,10 @@ function Get-CloudflareITGlueAPIAuth {
         try{
             $cfkey = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($($Auth.CloudflareAPIKey | ConvertTo-SecureString)))
             $itgkey = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($($Auth.ITGlueAPIKey | ConvertTo-SecureString)))
-            
             $cfkeyhalf = [int]($cfkey | Measure-Object -Character | ForEach-Object Characters) / 2
             $itgkeyhalf = [int]($itgkey | Measure-Object -Character | ForEach-Object Characters) / 2
+            $cfkey = $null
+            $itgkey = $null
     
             Write-Host "Cloudflare Email: $($Auth.CloudflareEmail)"
             Write-Host "Cloudflare API Key: $($cfkey.Substring(0,$cfkeyhalf))********************" -ErrorAction Ignore
