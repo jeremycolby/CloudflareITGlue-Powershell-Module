@@ -11,10 +11,9 @@ function Set-CloudflareITGlueClientUIDRecords {
         $ITGlueClientUIDRecordId = $ZoneRecords.result | Where-Object {$_.type -eq 'TXT' -and $_.name -like 'itglueclientuid.*'} | ForEach-Object id
         
         if ($ITGlueClientUIDRecord) {
-            if (-not $Zone.ITGlueClientUID) {
+            if (!$Zone.ITGlueClientUID) {
                 Write-Host "$($Zone.ZoneName): itglueclientuid record exists but has been removed from matching table, deleting dns record." -ForegroundColor DarkCyan
                 $Delete = New-CloudflareWebRequest -Endpoint "zones/$($Zone.ZoneId)/dns_records/$ITGlueClientUIDRecordId" -Method 'DELETE'
-
             }
             elseif ($Zone.ITGlueClientUID -and $ITGlueClientUIDRecord -ne $Zone.ITGlueClientUID) {
                 Write-Host "$($Zone.ZoneName): itglueclientuid record exists but does not match, updating dns record." -ForegroundColor DarkCyan
