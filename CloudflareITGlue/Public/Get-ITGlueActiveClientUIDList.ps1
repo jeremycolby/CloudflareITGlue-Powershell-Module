@@ -1,7 +1,7 @@
 function Get-ITGlueActiveClientUIDList {
     $UIDList = @()
     $Request = New-ITGlueWebRequest -Endpoint 'organizations' -Method 'GET' | ForEach-Object data | Where-Object {
-        $_.attributes.'organization-type-name' -eq 'Client' -and $_.attributes.'organization-status-name' -eq 'Active'}
+        $_.attributes.'organization-type-name' -eq 'Client'}
 
     foreach ($Response in $Request) {
         $UIDList += $Response.id + '__' + $Response.attributes.name
