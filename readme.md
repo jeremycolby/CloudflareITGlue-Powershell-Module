@@ -82,7 +82,7 @@ This is done with TXT records that are easily created/deleted/modified with `Set
 #### Client UID List
 
 ```powershell
-Get-ITGlueActiveClientUIDList
+Get-ITGlueClientUIDList
 ```
 
 >This will create and open a txt file in the current directory containing UIDs for all active ITGlue clients.  
