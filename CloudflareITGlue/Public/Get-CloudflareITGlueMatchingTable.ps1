@@ -1,9 +1,10 @@
 function Get-CloudflareITGlueMatchingTable {
     $ZoneMatchMatrix = @()
     $AllZones = New-CloudflareWebRequest -Endpoint 'zones'
+    $Progress = 0
     
     foreach ($Zone in $AllZones.result) {
-        
+        Write-Progress -Activity 'CloudflareAPI' -Status 'Creating Matching Table' -CurrentOperation $Zone.name -PercentComplete ($Progress / ($AllZones.result | Measure-Object | ForEach-Object count) * 100)
         $ZoneRecords = New-CloudflareWebRequest -Endpoint "zones/$($Zone.id)/dns_records"
         $ITGlueClientUIDRecord = $null
 
@@ -18,8 +19,11 @@ function Get-CloudflareITGlueMatchingTable {
             ITGlueClientUID = $ITGlueClientUIDRecord
         }
         $ZoneMatchMatrix += New-Object psobject -Property $Row
+        $Progress++
     }
+
     if($ZoneMatchMatrix){
+        Write-Progress -Activity 'CloudflareAPI' -Status 'Complete' -PercentComplete 100
         try {
             $ZoneMatchMatrix | Export-Csv 'ITGlueCloudflareMatchingTable.csv' -NoTypeInformation
             Invoke-Item 'ITGlueCloudflareMatchingTable.csv'
