@@ -42,10 +42,12 @@ function New-CloudflareWebRequest {
             New-CloudflareWebRequest -Endpoint $Endpoint -ResultsPerPage $ResultsPerPage -PageNumber $PageNumber
         }
         $APIKey = $null
+        $RequestParams = $null
         return $Request
     }
     catch {
         Write-Warning "Something went wrong with Cloudflare request:`n$_"
         $APIKey = $null
+        $RequestParams = $null
     }
 }
