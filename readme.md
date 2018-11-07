@@ -129,8 +129,8 @@ Set this up to run at an interval of your choosing however you like.
 >    -Argument '-NoProfile -WindowStyle Hidden -Command "& Sync-CloudflareITGlueFlexibleAssets"'
 >$Trigger = New-ScheduledTaskTrigger -Daily -At 8am
 >$Principal = New-ScheduledTaskPrincipal -UserID '%username%' -LogonType S4U
->    # -UserID '%username%': Be sure you've added auth info for the account you use here
 >Register-ScheduledTask -TaskName 'Sync zones' -Action $Action -Trigger $Trigger -Principal $Principal
+># Be sure you've added auth info for %username%
 >```
 
 ## References
