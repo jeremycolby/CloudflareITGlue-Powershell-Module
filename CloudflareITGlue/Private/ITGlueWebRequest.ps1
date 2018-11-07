@@ -40,10 +40,12 @@ function New-ITGlueWebRequest {
             New-ITGlueWebRequest -Endpoint $Endpoint -Body $Body -ResultsPerPage $ResultsPerPage -PageNumber $PageNumber
         }
         $APIKey = $null
+        $RequestParams = $null
         return $Request
     }
     catch {
         Write-Warning "Something went wrong with ITGlue request:`n$_"
         $APIKey = $null
+        $RequestParams = $null
     }
 }
