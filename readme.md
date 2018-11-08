@@ -86,7 +86,7 @@ Get-ITGlueClientUIDList
 ```
 
 >This will create and open a txt file in the current directory containing UIDs for all active ITGlue clients.  
->UID format: `OrganizationId__OrganizationName`  
+>UID format: `OrganizationName__OrganizationId`  
 
 #### Client/Zone Matching Table
 
