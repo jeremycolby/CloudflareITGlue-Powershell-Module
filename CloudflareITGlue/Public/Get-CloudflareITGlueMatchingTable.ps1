@@ -25,7 +25,7 @@ function Get-CloudflareITGlueMatchingTable {
     if($ZoneMatchMatrix){
         Write-Progress -Activity 'CloudflareAPI' -Status 'Complete' -PercentComplete 100
         try {
-            $ZoneMatchMatrix | Export-Csv 'ITGlueCloudflareMatchingTable.csv' -NoTypeInformation
+            $ZoneMatchMatrix | Sort-Object ZoneName | Export-Csv 'ITGlueCloudflareMatchingTable.csv' -NoTypeInformation
             Invoke-Item 'ITGlueCloudflareMatchingTable.csv'
         }
         catch {
