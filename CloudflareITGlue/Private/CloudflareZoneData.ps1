@@ -50,7 +50,7 @@ function Get-CloudflareZoneData {
         )
         $ZoneData = [ordered]@{
             Name           = $ZoneInfo.result.name
-            ITGlueClientID = ($ITGlueClientUIDRecord -split '__')[0]
+            ITGlueClientID = ($ITGlueClientUIDRecord -split '__')[1]
             SyncDate       = $Timestamp
             CfNameServers  = $ZoneInfo.result.name_servers
             Status         = $ZoneInfo.result.status
