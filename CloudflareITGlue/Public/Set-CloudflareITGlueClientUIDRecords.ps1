@@ -4,8 +4,10 @@ function Set-CloudflareITGlueClientUIDRecords {
     )
 
     $MatchingTable = Import-Csv $MatchingTable
+    $Progress = 0
 
     foreach ($Zone in $MatchingTable) {
+        Write-Progress -Activity 'Cloudflare API' -Status 'Setting UID TXT Records' -CurrentOperation $Zone.ZoneName -PercentComplete ($Progress / ($MatchingTable | Measure-Object | ForEach-Object count) * 100)
         $ZoneRecords = New-CloudflareWebRequest -Endpoint "zones/$($Zone.ZoneId)/dns_records"
         $ITGlueClientUIDRecord = $ZoneRecords.result | Where-Object {$_.type -eq 'TXT' -and $_.name -like 'itglueclientuid.*'} | ForEach-Object content
         $ITGlueClientUIDRecordId = $ZoneRecords.result | Where-Object {$_.type -eq 'TXT' -and $_.name -like 'itglueclientuid.*'} | ForEach-Object id
@@ -32,5 +34,7 @@ function Set-CloudflareITGlueClientUIDRecords {
         else {
             Write-Host "$($Zone.ZoneName): not matched" -ForegroundColor DarkCyan
         }
+        $Progress++
     }
+    Write-Progress -Activity 'Cloudflare API' -Status 'Setting UID TXT Records' -PercentComplete 100
 }
