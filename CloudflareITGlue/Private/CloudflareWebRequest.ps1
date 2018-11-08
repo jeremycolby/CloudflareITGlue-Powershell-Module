@@ -38,7 +38,7 @@ function New-CloudflareWebRequest {
         Start-Sleep -Milliseconds 255 
         $Request = Invoke-RestMethod @RequestParams
         Start-Sleep -Milliseconds 255
-        #RateLimit = 1200 requests/5 min but still getting gateway timeouts @ 300ms
+        #RateLimit = 1200 requests/5 min but still getting gateway timeouts @ 300ms+
                 
         if ($PageNumber -lt $Request.result_info.total_pages) {
             $PageNumber++
