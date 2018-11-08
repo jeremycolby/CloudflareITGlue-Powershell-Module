@@ -3,7 +3,7 @@ function Get-ITGlueClientUIDList {
     $Progress = 0
     
     $Clients = New-ITGlueWebRequest -Endpoint 'organizations' -Method 'GET' | ForEach-Object data | Where-Object {
-        $_.attributes.'organization-type-name' -eq 'Client'}
+        $_.attributes.'organization-type-name' -eq 'Client' -or $_.attributes.'organization-type-name' -eq 'Owner'}
 
     foreach ($Client in $Clients) {
         Write-Progress -Activity 'ITGlueAPI' -Status 'Creating Client UID List' -CurrentOperation $Client.attributes.name -PercentComplete ($Progress / ($Clients | Measure-Object | ForEach-Object count) * 100)
