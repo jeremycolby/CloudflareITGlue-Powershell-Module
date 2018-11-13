@@ -48,6 +48,34 @@ function Get-CloudflareZoneData {
             ';;   -- update the NS record(s) with the authoritative name servers for this domain.',
             ";;   -- update the NS record(s) with the authoritative name servers for this domain.`n;;   ** CloudflareITGlue Module: Updated $($Timestamp)"
         )
+        $RecordsHtml = 
+        '<div>
+            <table id="RecordTable" style="width:100%">
+                <thead>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Priority</th>
+                    <th>TTL</th>
+                    <th>Proxied</th>
+                    <th>Modified</th>
+                </thead>
+                <tbody>' +
+                $(foreach ($Record in $RecordArray) {
+                    "<tr>
+                        <td>$($Record.type)</td>
+                        <td>$($Record.name)</td>
+                        <td>$($Record.value)</td>
+                        <td>$($Record.priority)</td>
+                        <td>$($Record.ttl)</td>
+                        <td>$($Record.proxied)</td>
+                        <td>$($Record.modified)</td>
+                    </tr>"
+                }) +
+                '</tbody>
+            </table>
+        </div>'
+        
         $ZoneData = [ordered]@{
             Name           = $ZoneInfo.result.name
             ITGlueClientID = ($ITGlueClientUIDRecord -split '__')[1]
@@ -56,6 +84,7 @@ function Get-CloudflareZoneData {
             Status         = $ZoneInfo.result.status
             ZoneFileData   = $ZoneFileData
             DNSRecords     = $RecordArray
+            RecordsHtml    = $RecordsHtml
         }
         $ZoneData
     }

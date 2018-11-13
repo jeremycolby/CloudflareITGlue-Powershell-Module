@@ -11,50 +11,23 @@ function Sync-CloudflareITGlueFlexibleAssets {
         $ZoneData.ZoneFileData | Out-file $TempFile -Force -Encoding utf8
         $Base64ZoneFile = ([System.Convert]::ToBase64String([System.IO.File]::ReadAllBytes($TempFile)))
         Remove-Item $TempFile -Force
-        $RecordsHtml = 
-            '<div>
-                <table id="RecordTable" style="width:100%">
-                    <thead>
-                        <th>Type</th>
-                        <th>Name</th>
-                        <th>Value</th>
-                        <th>Priority</th>
-                        <th>TTL</th>
-                        <th>Proxied</th>
-                        <th>Modified</th>
-                    </thead>
-                    <tbody>' +
-                    $(foreach ($Record in $ZoneData.dnsrecords) {
-                        "<tr>
-                            <td>$($Record.type)</td>
-                            <td>$($Record.name)</td>
-                            <td>$($Record.value)</td>
-                            <td>$($Record.priority)</td>
-                            <td>$($Record.ttl)</td>
-                            <td>$($Record.proxied)</td>
-                            <td>$($Record.modified)</td>
-                        </tr>"
-                    }) +
-                    '</tbody>
-                </table>
-            </div>'
 
         $Body = @{
             data = @{
-                'type' = 'flexible-assets'
+                'type'       = 'flexible-assets'
                 'attributes' = @{
-                    'organization-id' = $($ZoneData.ITGlueClientID)
+                    'organization-id'        = $($ZoneData.ITGlueClientID)
                     'flexible-asset-type-id' = $FlexAssetTypeId
-                    'traits' = @{
-                        'name' = $ZoneData.Name
-                        'last-sync' = $ZoneData.SyncDate
+                    'traits'                 = @{
+                        'name'        = $ZoneData.Name
+                        'last-sync'   = $ZoneData.SyncDate
                         'nameservers' = $ZoneData.CfNameServers -join '<br>'
-                        'status' = $ZoneData.Status
-                        'zone-file' = @{
-                            'content' = $Base64ZoneFile
+                        'status'      = $ZoneData.Status
+                        'zone-file'   = @{
+                            'content'   = $Base64ZoneFile
                             'file_name' = "$($ZoneData.Name).txt"
                         }
-                        'dns-records' = $RecordsHtml
+                        'dns-records' = $($ZoneData.RecordsHtml)
                     }
                 }
             }
