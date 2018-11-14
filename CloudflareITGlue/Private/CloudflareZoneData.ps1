@@ -8,10 +8,13 @@ function Get-CloudflareZoneData {
     $ZoneInfo = New-CloudflareWebRequest -Endpoint "zones/$ZoneId"
     $ZoneRecords = New-CloudflareWebRequest -Endpoint "zones/$ZoneId/dns_records"
     $ZoneFileData = New-CloudflareWebRequest -Endpoint "zones/$ZoneId/dns_records/export"
-    $MatchId = $null
+    $OrgMatchId = $null
+    $DomainTrackerId = $null
+    
     foreach($ITGDomain in $ITGDomains){
-        if($ZoneInfo.result.name.tolower() -eq $ITGDomain.name.tolower()){
-            $MatchId = $ITGDomain.'organization-id'
+        if($ZoneInfo.result.name.ToLower() -eq $ITGDomain.attributes.name.ToLower()){
+            $OrgMatchId = $ITGDomain.attributes.'organization-id'
+            $DomainTrackerId = $ITGDomain.id
         }
     }
     
@@ -70,7 +73,8 @@ function Get-CloudflareZoneData {
         Status         = $ZoneInfo.result.status
         ZoneFileData   = $ZoneFileData
         RecordsHtml    = $RecordsHtml
-        ITGOrg         = $MatchId
+        ITGOrg         = $OrgMatchId
+        DomainTracker  = $DomainTrackerId
     }
     $ZoneData
 }
@@ -78,7 +82,7 @@ function Get-CloudflareZoneData {
 function Get-CloudflareZoneDataArray {
     $ZoneDataArray = @()
     $AllZones = New-CloudflareWebRequest -Endpoint 'zones'
-    $ITGDomains = New-ITGlueWebRequest -Endpoint 'domains' | ForEach-Object data | ForEach-Object attributes
+    [pscustomobject]$ITGDomains = New-ITGlueWebRequest -Endpoint 'domains' | ForEach-Object data
 
     $Progress = 0
 
