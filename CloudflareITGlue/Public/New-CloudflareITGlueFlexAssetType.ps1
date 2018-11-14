@@ -73,10 +73,11 @@ function New-CloudflareITGlueFlexAssetType {
                             type       = 'flexible_asset_fields'
                             attributes = @{
                                 order        = 6
-                                name         = 'DNS Records'
-                                kind         = 'Textbox'
-                                hint         = 'Table of DNS records in the zone'
-                                required     = $true
+                                name         = 'Domain Tracker'
+                                kind         = 'Tag'
+                                hint         = 'Tagged in Domain Tracker'
+                                tag_type     = 'Domains'
+                                required     = $false
                                 show_in_list = $false
                             }
                         },
@@ -84,11 +85,10 @@ function New-CloudflareITGlueFlexAssetType {
                             type       = 'flexible_asset_fields'
                             attributes = @{
                                 order        = 7
-                                name         = 'Domain Tracker'
-                                kind         = 'Tag'
-                                hint         = 'Tagged in Domain Tracker'
-                                tag_type     = 'Domains'
-                                required     = $false
+                                name         = 'DNS Records'
+                                kind         = 'Textbox'
+                                hint         = 'Table of DNS records in the zone'
+                                required     = $true
                                 show_in_list = $false
                             }
                         }
