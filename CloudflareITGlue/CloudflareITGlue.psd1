@@ -24,7 +24,7 @@
     Author            = 'Jeremy Colby'
 
     # Company or vendor of this module
-    CompanyName       = 'Nucleus Networks'
+    CompanyName       = ''
 
     # Copyright statement for this module
     Copyright         = '(c) 2018 Jeremy Colby. All rights reserved.'
