@@ -7,8 +7,11 @@ function Get-CloudflareZoneData {
     $Timestamp = (Get-Date).ToUniversalTime().ToString("yyyy-M-d HH:mm:ss")
     $ZoneInfo = New-CloudflareWebRequest -Endpoint "zones/$ZoneId"
     $ZoneRecords = New-CloudflareWebRequest -Endpoint "zones/$ZoneId/dns_records"
+    if($ZoneRecords.result_info.count -eq 0){
+        Write-Host "Empty Zone Detected: $($ZoneInfo.result.name)" -ForegroundColor Yellow
+        break
+    }
     $ZoneFileData = New-CloudflareWebRequest -Endpoint "zones/$ZoneId/dns_records/export"
-    
     $ZoneFileData = $ZoneFileData.Replace(
         "@	3600	IN	SOA	$($ZoneInfo.result.name).	root.$($ZoneInfo.result.name).	(",
         "@	3600	IN	SOA	$($ZoneInfo.result.name_servers[0]). $((($CloudflareAPIEmail -split '@')[0]).Replace('.','\.') + '.'+ ($CloudflareAPIEmail -split '@')[1]). ("
