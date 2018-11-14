@@ -8,7 +8,7 @@ function Get-CloudflareZoneData {
     $AccountId = New-CloudflareWebRequest -Endpoint 'accounts' | ForEach-Object result | ForEach-Object id
     $ZoneInfo = New-CloudflareWebRequest -Endpoint "zones/$ZoneId"
     $ZoneRecords = New-CloudflareWebRequest -Endpoint "zones/$ZoneId/dns_records"
-    if($ZoneRecords.result_info.count -eq 0){
+    if ($ZoneRecords.result_info.count -eq 0) {
         Write-Host "Empty Zone Detected: $($ZoneInfo.result.name)" -ForegroundColor Yellow
         break
     }
@@ -88,16 +88,16 @@ function Get-CloudflareZoneDataArray {
         Write-Progress -Activity 'CloudflareAPI' -Status 'Getting Zone Data' -CurrentOperation $Zone.name -PercentComplete ($Progress / ($AllZones.result | Measure-Object | ForEach-Object count) * 100) -Id 1
         
         $ITGMatches = @()
-        foreach($ITGDomain in $ITGDomains){
-            if($Zone.name.ToLower() -eq $ITGDomain.attributes.name.ToLower()){
+        foreach ($ITGDomain in $ITGDomains) {
+            if ($Zone.name.ToLower() -eq $ITGDomain.attributes.name.ToLower()) {
                 $Match = @{
-                    OrgMatchId = $ITGDomain.attributes.'organization-id'
+                    OrgMatchId      = $ITGDomain.attributes.'organization-id'
                     DomainTrackerId = $ITGDomain.id
                 }
                 $ITGMatches += [pscustomobject]$Match
             }
         }
-        foreach ($Match in $ITGMatches){
+        foreach ($Match in $ITGMatches) {
             $ZoneData = Get-CloudflareZoneData -ZoneId $Zone.id -ITGMatch $Match
             if ($ZoneData) {
                 $ZoneDataArray += New-Object psobject -Property $ZoneData

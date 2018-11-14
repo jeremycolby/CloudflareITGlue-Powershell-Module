@@ -14,12 +14,10 @@ function Add-CloudflareITGlueAPIAuth {
             Write-Host 'Cancelled' -ForegroundColor Yellow
             break
         }
-
         if (!$CloudflareCredentials.GetNetworkCredential().Password -or !$ITGCredentials.GetNetworkCredential().Password) {
             Write-Warning 'API key(s) not entered'
             break
         }
-
         $Credentials = @{
             CloudflareEmail  = $CloudflareAPIEmail
             CloudflareAPIKey = ($CloudflareAPIKey | ConvertFrom-SecureString)
@@ -39,7 +37,7 @@ function Get-CloudflareITGlueAPIAuth {
         
         $Auth = Import-Csv "$ModuleBase\$env:username.auth"
         
-        try{
+        try {
             $cfkey = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($($Auth.CloudflareAPIKey | ConvertTo-SecureString)))
             $itgkey = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($($Auth.ITGlueAPIKey | ConvertTo-SecureString)))
             $cfkeyhalf = [int]($cfkey | Measure-Object -Character | ForEach-Object Characters) / 2
@@ -52,7 +50,7 @@ function Get-CloudflareITGlueAPIAuth {
             $cfkey = $null
             $itgkey = $null
         }
-        catch{
+        catch {
             Write-Warning 'Invalid format or unable to decrypt'
             Write-Warning 'Run Add-CloudflareITGlueAPIAuth to re-add auth info for the current account'
             
