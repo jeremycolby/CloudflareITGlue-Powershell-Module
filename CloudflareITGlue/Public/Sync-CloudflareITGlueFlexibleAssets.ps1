@@ -5,6 +5,12 @@ function Sync-CloudflareITGlueFlexibleAssets {
     $FlexAssetTypeId = New-ITGlueWebRequest -Endpoint 'flexible_asset_types' -Method 'GET' | ForEach-Object data | Where-Object {$_.attributes.name -eq 'Cloudflare DNS'} | ForEach-Object id
 
     foreach ($ZoneData in $ZoneDataArray) {
+
+        if(!$ZoneData.ITGOrg){
+            Write-Host "$($ZoneData.name): Add to domain tracker" -ForegroundColor Yellow
+            continue
+        }
+
         Write-Progress -Activity 'ITGlueAPI' -Status 'Syncing Flexible Assets' -CurrentOperation $ZoneData.name -PercentComplete ($Progress / ($ZoneDataArray | Measure-Object | foreach-object count) * 100) -Id 2
 
         $TempFile = New-TemporaryFile
@@ -16,7 +22,7 @@ function Sync-CloudflareITGlueFlexibleAssets {
             data = @{
                 'type'       = 'flexible-assets'
                 'attributes' = @{
-                    'organization-id'        = $($ZoneData.ITGlueClientID)
+                    'organization-id'        = $ZoneData.ITGOrg
                     'flexible-asset-type-id' = $FlexAssetTypeId
                     'traits'                 = @{
                         'name'        = $ZoneData.Name
@@ -27,14 +33,17 @@ function Sync-CloudflareITGlueFlexibleAssets {
                             'content'   = $Base64ZoneFile
                             'file_name' = "$($ZoneData.Name).txt"
                         }
-                        'dns-records' = $($ZoneData.RecordsHtml)
+                        'dns-records' = $ZoneData.RecordsHtml
+                        'domain-tracker' = $ZoneData.DomainTracker
                     }
                 }
             }
         }
 
+        
+
         $Body = $Body | ConvertTo-Json -Depth 4
-        $FlexAssets = New-ITGlueWebRequest -Endpoint "flexible_assets?filter[flexible_asset_type_id]=$FlexAssetTypeId&filter[organization_id]=$($ZoneData.ITGlueClientID)" -Method 'GET' | ForEach-Object data
+        $FlexAssets = New-ITGlueWebRequest -Endpoint "flexible_assets?filter[flexible_asset_type_id]=$FlexAssetTypeId&filter[organization_id]=$($ZoneData.ITGOrg)" -Method 'GET' | ForEach-Object data
         $PatchId = $null
         foreach ($FlexAsset in $FlexAssets) {
             if ($FlexAsset.attributes.traits.name -eq $ZoneData.name) {
