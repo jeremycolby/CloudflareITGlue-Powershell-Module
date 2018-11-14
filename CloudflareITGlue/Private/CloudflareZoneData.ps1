@@ -9,7 +9,7 @@ function Get-CloudflareZoneData {
     $ZoneInfo = New-CloudflareWebRequest -Endpoint "zones/$ZoneId"
     $ZoneRecords = New-CloudflareWebRequest -Endpoint "zones/$ZoneId/dns_records"
     if ($ZoneRecords.result_info.count -eq 0) {
-        Write-Host "Empty Zone Detected: $($ZoneInfo.result.name)" -ForegroundColor Yellow
+        Write-Host "$($ZoneInfo.result.name): Empty Zone Detected" -ForegroundColor Yellow
         break
     }
     $ZoneFileData = New-CloudflareWebRequest -Endpoint "zones/$ZoneId/dns_records/export"
@@ -97,10 +97,15 @@ function Get-CloudflareZoneDataArray {
                 $ITGMatches += [pscustomobject]$Match
             }
         }
-        foreach ($Match in $ITGMatches) {
-            $ZoneData = Get-CloudflareZoneData -ZoneId $Zone.id -ITGMatch $Match
-            if ($ZoneData) {
-                $ZoneDataArray += New-Object psobject -Property $ZoneData
+        if(!$ITGMatches){
+            Write-Host "$($Zone.name): Add to domain tracker" -ForegroundColor Yellow
+        }
+        else{
+            foreach ($Match in $ITGMatches) {
+                $ZoneData = Get-CloudflareZoneData -ZoneId $Zone.id -ITGMatch $Match
+                if ($ZoneData) {
+                    $ZoneDataArray += New-Object psobject -Property $ZoneData
+                }
             }
         }
         $Progress++

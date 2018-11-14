@@ -9,10 +9,6 @@ function Sync-CloudflareITGlueFlexibleAssets {
 
     foreach ($ZoneData in $ZoneDataArray) {
 
-        if (!$ZoneData.ITGOrg) {
-            Write-Host "$($ZoneData.name): Add to domain tracker" -ForegroundColor Yellow
-            continue
-        }
         Write-Progress -Activity 'ITGlueAPI' -Status 'Syncing Flexible Assets' -CurrentOperation $ZoneData.name -PercentComplete ($Progress / ($ZoneDataArray | Measure-Object | foreach-object count) * 100) -Id 2
 
         $TempFile = New-TemporaryFile
