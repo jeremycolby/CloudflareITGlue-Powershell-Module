@@ -1,9 +1,13 @@
 function New-CloudflareITGlueFlexAssetType {
+    param(
+        [string]$Name = 'Cloudflare DNS'
+    )
+
     $Body = @{
         Data = @{
             type          = 'flexible_asset_types'
             attributes    = @{
-                name         = 'Cloudflare DNS'
+                name         = $Name
                 description  = 'DNS Zones from Cloudflare.'
                 icon         = 'cloud'
                 enabled      = $true

@@ -1,8 +1,11 @@
 function Sync-CloudflareITGlueFlexibleAssets {
+    param(
+        [string]$FlexAssetType = 'Cloudflare DNS'
+    )
     
     $Progress = 0
     $ZoneDataArray = Get-CloudflareZoneDataArray
-    $FlexAssetTypeId = New-ITGlueWebRequest -Endpoint 'flexible_asset_types' -Method 'GET' | ForEach-Object data | Where-Object {$_.attributes.name -eq 'Cloudflare DNS'} | ForEach-Object id
+    $FlexAssetTypeId = New-ITGlueWebRequest -Endpoint 'flexible_asset_types' -Method 'GET' | ForEach-Object data | Where-Object {$_.attributes.name -eq $FlexAssetType} | ForEach-Object id
 
     foreach ($ZoneData in $ZoneDataArray) {
 
