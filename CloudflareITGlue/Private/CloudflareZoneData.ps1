@@ -5,6 +5,7 @@ function Get-CloudflareZoneData {
     )
     
     $Timestamp = (Get-Date).ToUniversalTime().ToString("yyyy-M-d HH:mm:ss")
+    $AccountId = New-CloudflareWebRequest -Endpoint 'accounts' | ForEach-Object result | ForEach-Object id
     $ZoneInfo = New-CloudflareWebRequest -Endpoint "zones/$ZoneId"
     $ZoneRecords = New-CloudflareWebRequest -Endpoint "zones/$ZoneId/dns_records"
     if($ZoneRecords.result_info.count -eq 0){
@@ -34,6 +35,10 @@ function Get-CloudflareZoneData {
     )
     $RecordsHtml = 
     '<div>
+        <p><a class="btn btn-sm btn-default" href="https://dash.cloudflare.com/' + $AccountId + "/$($ZoneInfo.result.name)" + '/dns" rel="nofollow" style="display: inline" title="Cloudflare">
+            <i class="fa fa-fw fa-external-link"></i>
+            <span>Open in Cloudflare</span>
+        </a></p>
         <table id="RecordTable" style="width:100%">
             <thead>
                 <th>Type</th>
