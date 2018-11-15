@@ -5,13 +5,16 @@ function Add-CloudflareITGlueAPIAuth {
     else {
         [pscredential]$CloudflareCredentials = $Host.UI.PromptForCredential('Cloudflare API Authentication', "User name:  Cloudflare Email`r`nPassword:    Cloudflare API Key", '', '')
         [pscredential]$ITGCredentials = $Host.UI.PromptForCredential('ITGlue API Authentication', 'Password:    ITGlue API Key', 'ITGlue', '')
-
-        Set-Variable -Name CloudflareAPIEmail -Scope global -Value $CloudflareCredentials.username
-        Set-Variable -Name CloudflareAPIKey -Scope global -Value $CloudflareCredentials.Password
-        Set-Variable -Name ITGlueAPIKey -Scope global -Value $ITGCredentials.Password
+        $Global:CloudflareAPIEmail = $CloudflareCredentials.username
+        $Global:CloudflareAPIKey = $CloudflareCredentials.Password
+        $Global:ITGlueAPIKey = $ITGCredentials.Password
         
         if (!$CloudflareAPIEmail -or !$CloudflareAPIKey -or !$ITGlueAPIKey) {
             Write-Host 'Cancelled' -ForegroundColor Yellow
+            break
+        }
+        if ($CloudflareAPIEmail -notmatch "\A[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\z") {
+            Write-Host 'Invalid email address format' -ForegroundColor Yellow
             break
         }
         if (!$CloudflareCredentials.GetNetworkCredential().Password -or !$ITGCredentials.GetNetworkCredential().Password) {
@@ -34,7 +37,6 @@ function Add-CloudflareITGlueAPIAuth {
 function Get-CloudflareITGlueAPIAuth {
     if (Test-Path "$ModuleBase\$env:username.auth") {
         Write-Host 'Auth file detected' -ForegroundColor Green
-        
         $Auth = Import-Csv "$ModuleBase\$env:username.auth"
         
         try {
@@ -42,24 +44,21 @@ function Get-CloudflareITGlueAPIAuth {
             $itgkey = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($($Auth.ITGlueAPIKey | ConvertTo-SecureString)))
             $cfkeyhalf = [int]($cfkey | Measure-Object -Character | ForEach-Object Characters) / 2
             $itgkeyhalf = [int]($itgkey | Measure-Object -Character | ForEach-Object Characters) / 2
-    
             Write-Host "Cloudflare Email: $($Auth.CloudflareEmail)"
             Write-Host "Cloudflare API Key: $($cfkey.Substring(0,$cfkeyhalf))********************" -ErrorAction Ignore
             Write-Host "ITGlue API Key: $($itgkey.Substring(0,$itgkeyhalf))********************`n" -ErrorAction Ignore
-            
             $cfkey = $null
             $itgkey = $null
         }
         catch {
             Write-Warning 'Invalid format or unable to decrypt'
             Write-Warning 'Run Add-CloudflareITGlueAPIAuth to re-add auth info for the current account'
-            
             $cfkey = $null
             $itgkey = $null
         }
     }
     else {
-        Write-Host "Not auth detected for $env:username" -ForegroundColor Yellow
+        Write-Host "No auth detected for $env:username" -ForegroundColor Yellow
     }
 }
 
