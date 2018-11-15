@@ -97,16 +97,16 @@ function Get-CloudflareZoneDataArray {
                 $ITGMatches += [pscustomobject]$Match
             }
         }
-        if(!$ITGMatches){
-            Write-Host "$($Zone.name): Add to domain tracker" -ForegroundColor Yellow
-        }
-        else{
+        if($ITGMatches){
             foreach ($Match in $ITGMatches) {
                 $ZoneData = Get-CloudflareZoneData -ZoneId $Zone.id -ITGMatch $Match
                 if ($ZoneData) {
                     $ZoneDataArray += New-Object psobject -Property $ZoneData
                 }
             }
+        }
+        else{
+            Write-Host "$($Zone.name): Add to domain tracker" -ForegroundColor Yellow
         }
         $Progress++
     }
