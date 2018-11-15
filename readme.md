@@ -12,7 +12,7 @@
 >**Status:** Status of the Cloudflare DNS Zone  
 >**Zone File:** BIND format zone file  
 >**Domain Tracker:** Domain Tracker Tag  
->**DNS Records:** Table of all DNS records in the zone and a link to the DNS zone page in Cloudflare  
+>**DNS Records:** Table of all DNS records in the zone and a link to the zone page in Cloudflare  
 >**Revisions:** Flex assets contain revision history by nature  
 
 ## How it works
@@ -85,7 +85,7 @@ Sync-CloudflareITGlueFlexibleAssets
 ```
 
 >This command will match Cloudflare zones to ITGlue orgs using the Domain Tracker then sync the zones as flex assets to their respective organizations.  
->You'll be notified of any Cloudflare zones not in the Domain Tracker.  
+>Cloudflare zones that are not in the Domain Tracker will be output to the console.  
 >If you used a custom name for the flex asset type, you'll also need to pass it to the sync command via the optional FlexAssetType parameter:  
 >`Sync-CloudflareITGlueFlexibleAssets -FlexAssetType 'My Cloudflare DNS'`  
 
