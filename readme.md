@@ -105,5 +105,8 @@ Set this up to run at an interval of your choosing however you like.
 ## References
 
 [Cloudflare API Documentation](https://api.cloudflare.com/)  
+>On Rate Limiting: "The Cloudflare API sets a maximum of 1,200 requests in a five minute period."  
+>You may still see the odd gateway timeout even though the rate limit is accounted for.  
+
 [ITGlue API Documentation](https://api.itglue.com/developer/)  
 [Invoke-RestMethod Documentation](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/invoke-restmethod/)  
