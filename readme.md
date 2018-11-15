@@ -4,7 +4,7 @@
 
 - Sync Cloudflare DNS Zones to ITGlue Client Organizations as Flex Assets
 
-![screenshot](https://user-images.githubusercontent.com/43423017/48520486-a7b6a900-e825-11e8-926b-caad0cff04bd.png)
+![screenshot](https://user-images.githubusercontent.com/43423017/48573233-6e7f4700-e8c0-11e8-8dd1-793e06620e96.png)
 
 >**Name:** Name of the Cloudflare DNS Zone  
 >**Last Sync:** Timestamp when flex asset is created/updated  
