@@ -101,7 +101,7 @@ function Get-CloudflareZoneDataArray {
             foreach ($Match in $ITGMatches) {
                 $ZoneData = Get-CloudflareZoneData -ZoneId $Zone.id -ITGMatch $Match
                 if ($ZoneData) {
-                    $ZoneDataArray += New-Object psobject -Property $ZoneData
+                    $ZoneDataArray += [pscustomobject]$ZoneData
                 }
             }
         }

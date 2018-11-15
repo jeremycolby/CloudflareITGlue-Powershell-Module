@@ -27,7 +27,7 @@ function Add-CloudflareITGlueAPIAuth {
             ITGlueAPIKey     = ($ITGlueAPIKey | ConvertFrom-SecureString)
         }
         $Auth = @()
-        $Auth += New-Object psobject -Property $Credentials
+        $Auth += [pscustomobject]$Credentials
         $ModuleBase = Get-Module CloudflareITGlue | ForEach-Object ModuleBase
         
         $Auth | Export-Csv "$ModuleBase\$env:username.auth" -NoTypeInformation -Force
