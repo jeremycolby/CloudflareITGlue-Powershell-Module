@@ -12,7 +12,7 @@
 >**Status:** Status of the Cloudflare DNS Zone  
 >**Zone File:** BIND format zone file  
 >**Domain Tracker:** Domain Tracker Tag  
->**DNS Records:** Table of all DNS records in the zone and a link to DNS zone page in Cloudflare  
+>**DNS Records:** Table of all DNS records in the zone and a link to the DNS zone page in Cloudflare  
 >**Revisions:** Flex assets contain revision history by nature  
 
 ## How it works
